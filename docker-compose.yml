@@ -1,0 +1,20 @@
+services:
+  nodejs-lb:
+    build: ./expresslb
+    expose:
+      - "3000" # Expose port 3000 internally for NGINX to communicate
+    networks:
+      - app_network
+
+  nginx-lb:
+    build: ./nginx
+    ports:
+      - "80:80" # Expose NGINX HTTP port to the internet
+    networks:
+      - app_network
+    depends_on:
+      - nodejs-lb
+
+networks:
+  app_network:
+    driver: bridge
